@@ -12,17 +12,28 @@ app.get('/apps', (req, res) => {
     //if there is a genres query param...
     if (genres) {
         //confused by this 
-        if (!['Action', 'Puzzle','Strategy','Casual','Arcade','Card'].includes(genres)) {
+        //includes doesn't work on most browsers, indexOf will work on all
+        //if not included in array...
+        if (['Action', 'Puzzle','Strategy','Casual','Arcade','Card'].indexOf(genres)===-1) {
           return res
             .status(400)
             .send('Genre must be Action, Puzzle, Strategy, Casual, Arcade, or Card.');
         }
+        //for testing
+        /*if(genres=="Action"){
+            let results = apps 
+                .filter(app => 
+                    app
+                        .Genres
+                        .includes("Action"))
+            return res.status(200).send(results)
+        }*/
       }
 
     //if there is a sort query param...
     if (sort) {
-        //confused by this 
-        if (!['app', 'rating'].includes(sort)) {
+
+        if (['app', 'rating'].indexOf(sort)===-1) {
             return res
             .status(400)
             .send('Sort must be either rating or app.');
@@ -57,12 +68,9 @@ app.get('/apps', (req, res) => {
         }
     }
 
-    
     //return results as JSON
     res
       .json(results);
 });
 
-app.listen(8001, () => {
-  console.log('Server started on PORT 8001');
-});
+module.exports = app
